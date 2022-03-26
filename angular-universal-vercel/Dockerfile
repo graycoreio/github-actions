@@ -1,6 +1,6 @@
 FROM node:14
 
-RUN npm install -g vercel]
+RUN npm install -g vercel
 
 COPY vercel.json vercel.json
 
