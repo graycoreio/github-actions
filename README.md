@@ -2,9 +2,9 @@
 
 ## Actions
 
-Action Name                | Description                                                             | Version | Usage
--------------------------- | ----------------------------------------------------------------------- | ------- | -----------------------------------
-Angular Universal (Vercel) | A Github Action that deploys an Angular Universal application to Vercel | 9+      | [Try me](#angular-universal-vercel)
+Action Name                                               | Description
+--------------------------------------------------------- | -----------------------------------------------------------------------
+[Angular Universal (Vercel)]((#angular-universal-vercel)) | A Github Action that deploys an Angular Universal application to Vercel
 
 ### Angular Universal (Vercel)
 
