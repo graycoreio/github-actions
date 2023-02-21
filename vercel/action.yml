@@ -1,0 +1,38 @@
+name: "Vercel Deploy"
+author: "Graycore"
+description: "A Github Action that deploys a static site to Vercel"
+inputs:
+  prod:
+    description: "Whether or not to do a Vercel Prod Deploy"
+    required: true
+    default: 'false'
+  vercel_token:
+    description: "Your Vercel Token"
+    required: true
+  vercel_org:
+    description: "Your Vercel Org"
+    required: true
+  vercel_project_id:
+    description: "Your Vercel Project Id"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - run: npm install -g vercel
+      shell: bash
+
+    - run: set | grep "VERCEL"
+      shell: bash
+
+    - name: Vercel Deploy (prod)
+      if: ${{ inputs.prod == 'true' }}
+      shell: bash
+      run: |
+        VERCEL_ORG_ID="${{ inputs.vercel_org }}" VERCEL_PROJECT_ID="${{ inputs.vercel_project_id }}" npx vercel --token="${{ inputs.vercel_token }}" --prod
+
+    - name: Vercel Deploy
+      if: ${{ inputs.prod == 'false' }}
+      shell: bash
+      run: |
+        VERCEL_ORG_ID="${{ inputs.vercel_org }}" VERCEL_PROJECT_ID="${{ inputs.vercel_project_id }}" npx vercel --token="${{ inputs.vercel_token }}"
