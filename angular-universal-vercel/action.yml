@@ -1,6 +1,9 @@
 name: "Angular Universal Vercel Deploy"
+
 author: "Graycore"
+
 description: "A Github Action that deploys an Angular Universal application to Vercel"
+
 inputs:
   prod:
     description: "Whether or not to do a Vercel Prod Deploy"
@@ -14,6 +17,10 @@ inputs:
   vercel_project_id:
     description: "Your Vercel Project Id"
     required: true
+
+outputs:
+  url: 
+    description: 'The URL of the Vercel Deployment'
 
 runs:
   using: "docker"
