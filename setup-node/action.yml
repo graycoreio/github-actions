@@ -7,6 +7,9 @@ inputs:
   use-stamp-cache:
     description: 'Whether or not to use the stamp cache (skip install, use old node_modules)'
     default: false
+  registry-url:
+    description: 'Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file, and set up auth to read in from env.NODE_AUTH_TOKEN.'
+
 
 runs:
   using: 'composite'
@@ -15,6 +18,7 @@ runs:
       name: Set Node Version
       with:
         node-version: ${{ inputs.node-version }}
+        registry-url: ${{ inputs.registry-url }}
 
     - name: Get npm cache directory
       id: npm-cache-dir
