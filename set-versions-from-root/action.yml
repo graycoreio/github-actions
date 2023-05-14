@@ -1,0 +1,25 @@
+name: "Compute Supported Magento 2 Versions"
+author: "Graycore"
+description: "A Github Action that computes the Github Actions matrix for the chosen versions of Magento 2"
+
+inputs:
+  root-package-path:
+    required: false
+    description: "The path to a package.json"
+    default: './package.json'
+  package-glob:
+    required: false
+    description: "A glob pattern specifying the package.json's that you want to modify."
+    default: 'dist/**/package.json'
+  placeholder:
+    required: false
+    description: "The value that of a key that holds a version that needs to be replaced."
+    default: '0.0.0-PLACEHOLDER'
+
+runs:
+  using: "node16"
+  main: dist/index.js
+
+branding:
+  icon: "code"
+  color: "green"

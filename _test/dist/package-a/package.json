@@ -1,0 +1,11 @@
+{
+  "name": "@graycore/package-a",
+  "version": "0.0.0-PLACEHOLDER",
+  "scripts": {
+    "test": "testme"
+  },
+  "peerDependencies": {
+    "@graycore/test": "0.0.0-PLACEHOLDER",
+    "@graycore/test2": "0.0.0-PLACEHOLDER"
+  }
+}

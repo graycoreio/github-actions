@@ -1,0 +1,22 @@
+name: test-ci
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+    main:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v3
+          with:
+            fetch-depth: 1
+        - uses: ./set-versions-from-root
+          with: 
+            root-package-path: '_test/package.json'
+            package-glob: '_test/dist/**/package.json'
+
+        - run: |
+            echo "Hello"
+            ls -Al _test/dist/package-c/package.json
+            cat _test/dist/package-c/package.json | jq
