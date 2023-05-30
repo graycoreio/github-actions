@@ -9,6 +9,9 @@ inputs:
     default: false
   registry-url:
     description: 'Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file, and set up auth to read in from env.NODE_AUTH_TOKEN.'
+  working-directory:
+    description: 'The working directory of setup'
+    default: ''
 
 
 runs:
@@ -28,7 +31,7 @@ runs:
       run: |        
         if [ "$STAMP" == "true" ] 
         then
-          echo "dir=$GITHUB_WORKSPACE/node_modules" >> ${GITHUB_OUTPUT}
+          echo "dir=${{ inputs.working-directory }}/node_modules" >> ${GITHUB_OUTPUT}
         else
           echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
         fi
@@ -60,6 +63,7 @@ runs:
           ${{ steps.npm-cache-keys.outputs.restore }}
 
     - run: npx npm ci --prefer-offline --no-audit --no-shrinkwrap
+      working-directory: ${{ inputs.working-directory }}
       shell: bash
       name: Install Dependencies
       if: inputs.use-stamp-cache && steps.npm-cache.outputs.cache-hit != 'true'
@@ -68,6 +72,7 @@ runs:
         rm -rf node_modules/.ng-packagr-ngcc
         rm -rf node_modules/.cli-ngcc
         rm -rf node_modules/.cache
+      working-directory: ${{ inputs.working-directory }}
       shell: bash
       name: Clear nx and angular junk
       if: inputs.use-stamp-cache && steps.npm-cache.outputs.cache-hit == 'true'
