@@ -1,9 +1,12 @@
 name: clear-old-nx-cache
 
 inputs:
-  size-in-mb: 
+  size-in-mb:
     description: 'Cache Size in Mb'
     required: true
+  cache-directory:
+    description: 'The path to the NX cache directory'
+    default: '.nx_cache'
 
 runs:
   using: 'composite'
@@ -12,11 +15,11 @@ runs:
     # https://github.com/SethDavenport
     # https://github.com/nrwl/nx/issues/2883#issuecomment-1449078285
     - name: Clear old cache entries
-      env: 
+      env:
         SIZE: ${{ inputs.size-in-mb }}
       run: |
         # Create a potential empty folder.
-        mkdir -p .nx_cache
+        mkdir -p ${{ inputs.cache-directory }}
 
         # This script accepts as an argument a number of megabytes. It will then
         # delete entries in the nx cache, oldest first, until the overall size
@@ -25,14 +28,14 @@ runs:
         maxSizeKB=$(($SIZE*1024)) # in MB
 
         # Sort files by modification time, oldest first
-        taskHashes=($(ls -tr .nx_cache | grep -v -E "(\.commit|^d|^terminalOutputs|nxdeps.json)$" || [[ $? == 1 ]]))
+        taskHashes=($(ls -tr ${{ inputs.cache-directory }} | grep -v -E "(\.commit|^d|^terminalOutputs|nxdeps.json)$" || [[ $? == 1 ]]))
 
         # Calculate current total size
         totalSize=0
         for hash in "${taskHashes[@]}"; do
-          totalSize=$((totalSize + $(du -sk ".nx_cache/$hash" | cut -f 1)))
-          totalSize=$((totalSize + $(du -sk ".nx_cache/$hash.commit" | cut -f 1)))
-          totalSize=$((totalSize + $(du -sk ".nx_cache/terminalOutputs/$hash" | cut -f 1)))
+          totalSize=$((totalSize + $(du -sk "${{ inputs.cache-directory }}/$hash" | cut -f 1)))
+          totalSize=$((totalSize + $(du -sk "${{ inputs.cache-directory }}/$hash.commit" | cut -f 1)))
+          totalSize=$((totalSize + $(du -sk "${{ inputs.cache-directory }}/terminalOutputs/$hash" | cut -f 1)))
         done
 
         echo "Starting total size: $totalSize, requested max size: $maxSizeKB KB"
@@ -41,17 +44,17 @@ runs:
         i=0
         while [ "$totalSize" -gt "$maxSizeKB" ]; do
           hash=${taskHashes[$i]}
-          totalSize=$((totalSize - $(du -sk ".nx_cache/$hash" | cut -f 1)))
-          totalSize=$((totalSize - $(du -sk ".nx_cache/$hash.commit" | cut -f 1)))
-          totalSize=$((totalSize - $(du -sk ".nx_cache/terminalOutputs/$hash" | cut -f 1)))
+          totalSize=$((totalSize - $(du -sk "${{ inputs.cache-directory }}/$hash" | cut -f 1)))
+          totalSize=$((totalSize - $(du -sk "${{ inputs.cache-directory }}/$hash.commit" | cut -f 1)))
+          totalSize=$((totalSize - $(du -sk "${{ inputs.cache-directory }}/terminalOutputs/$hash" | cut -f 1)))
 
           echo "Deleting files associated with hash $hash; totalSize is now $totalSize"
-          rm -rf ".nx_cache/$hash"
-          rm -rf ".nx_cache/$hash.commit"
-          rm -rf ".nx_cache/terminalOutputs/$hash"
+          rm -rf "${{ inputs.cache-directory }}/$hash"
+          rm -rf "${{ inputs.cache-directory }}/$hash.commit"
+          rm -rf "${{ inputs.cache-directory }}/terminalOutputs/$hash"
           i=$i+1
         done
 
         echo "Finished total size: $totalSize"
       shell: bash
-      
+
