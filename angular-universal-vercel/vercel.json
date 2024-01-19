@@ -3,7 +3,7 @@
     "public": true,
     "functions": {
         "api/serverless.js": {
-            "includeFiles": "{server/*.js,browser/{*.html,*.css}}",
+            "includeFiles": "{server/*.js,browser/{*.html,*.css},browser/**/*.json}",
             "runtime": "@vercel/node@1.8.5"
         }
     },
