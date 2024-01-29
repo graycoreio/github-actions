@@ -7,7 +7,8 @@ description: "A Github Action that deploys an Angular Universal application to V
 inputs:
   prod:
     description: "Whether or not to do a Vercel Prod Deploy"
-    required: true
+    required: false
+    default: 'false'
   vercel_token:
     description: "Your Vercel Token"
     required: true
