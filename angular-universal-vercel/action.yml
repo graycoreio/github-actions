@@ -17,6 +17,10 @@ inputs:
   vercel_project_id:
     description: "Your Vercel Project Id"
     required: true
+  ng_version:
+    description: "Your Angular Version"
+    required: false
+    default: '16'
 
 outputs:
   url: 

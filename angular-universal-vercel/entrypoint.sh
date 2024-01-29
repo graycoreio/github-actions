@@ -4,6 +4,14 @@ set -e
 echo "Copy workspace files to /app"
 cp -R "${GITHUB_WORKSPACE}/." "/app"
 
+echo "Copy appropriate serverless files to /api for Angular $INPUT_NG_VERSION"
+if [ "$INPUT_NG_VERSION" == "17" ]
+then
+    cp -R /v17/* /app
+else
+    cp -R /v16/* /app 
+fi
+
 echo "Switch current working directory to app"
 cd "/app"
 

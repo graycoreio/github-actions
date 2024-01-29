@@ -7,19 +7,19 @@ inputs:
   artifact-zip-name:
     required: false
     description: 'The name of the zip file in the artifact (omit if you do not store a zip INSIDE your artifact).'
-    type: string
   vercel-token:
-    reqired: true
+    required: true
     description: "A secret representing the used Vercel Token"
-    type: string
   vercel-org:
-    reqired: true
+    required: true
     description: "A secret representing the used Vercel Organization"
-    type: string
   vercel-project-id:
-    reqired: true
+    required: true
     description: "A secret representing the used Vercel Project ID"
-    type: string
+  ng-version:
+    description: "Your Angular Version"
+    required: false
+    default: '16'
 
 outputs:
   url:
@@ -64,3 +64,4 @@ runs:
       vercel_token: ${{ inputs.vercel-token }}
       vercel_org: ${{ inputs.vercel-org }}
       vercel_project_id: ${{ inputs.vercel-project-id }}
+      ng_version: ${{ inputs.ng-version }}

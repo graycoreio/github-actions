@@ -4,10 +4,9 @@ RUN npm install -g vercel
 
 WORKDIR /app
 
-COPY vercel.json vercel.json
-
 COPY entrypoint.sh /entrypoint.sh
 
-COPY api api
+COPY v16 /v16
+COPY v17 /v17
 
 ENTRYPOINT ["bash", "/entrypoint.sh"]
