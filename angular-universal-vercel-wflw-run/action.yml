@@ -33,15 +33,24 @@ runs:
     uses: actions/github-script@v7
     with:
       script: |
-        var artifacts = await github.actions.listWorkflowRunArtifacts({
+        var artifacts = await github.rest.actions.listWorkflowRunArtifacts({
           owner: context.repo.owner,
           repo: context.repo.repo,
           run_id: ${{ github.event.workflow_run.id }},
         });
-        var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
-          return artifact.name == "${{ inputs.artifact }}"
-        })[0];
-        var download = await github.actions.downloadArtifact({
+
+        if (artifacts.data.artifacts.length === 0) {
+          throw new Error("No artifacts found for this workflow run.");
+        }
+        
+        // Find the artifact you need (e.g., by name)
+        const matchArtifact = artifacts.data.artifacts.find(a => a.name === "${{ inputs.artifact }}");
+
+        if (!matchArtifact) {
+          throw new Error("Artifact not found.");
+        }
+        
+        var download = await github.rest.actions.downloadArtifact({
           owner: context.repo.owner,
           repo: context.repo.repo,
           artifact_id: matchArtifact.id,
