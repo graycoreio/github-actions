@@ -19,7 +19,7 @@ inputs:
   ng-version:
     description: "Your Angular Version"
     required: false
-    default: '16'
+    default: '19'
 
 outputs:
   url:
@@ -30,7 +30,7 @@ runs:
   using: 'composite'
   steps:
   - name: 'Download ${{ inputs.artifact }}'
-    uses: actions/github-script@v3.1.0
+    uses: actions/github-script@v7
     with:
       script: |
         var artifacts = await github.actions.listWorkflowRunArtifacts({

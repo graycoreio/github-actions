@@ -21,7 +21,7 @@ inputs:
   ng_version:
     description: "Your Angular Version"
     required: false
-    default: '16'
+    default: '19'
 
 outputs:
   url: 
