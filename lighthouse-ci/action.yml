@@ -1,0 +1,27 @@
+name: 'Lighthouse CI Action'
+description: 'Run LHCI `autorun` against a target web application.'
+author: 'Graycore'
+
+inputs:
+  domain:
+    description: 'The domain you would like to target.'
+    default: 'https://www.example.com'
+
+  lhci_server_url:
+    description: 'The server url of your lighthouse server.'
+
+  lhci_token:
+    description: The token used to authenticate with your LHCI server.
+
+runs:
+  using: "composite"
+  steps:
+  - name: Run LHCI
+    run: npx -p @lhci/cli lhci autorun
+    shell: bash
+    env:
+      LHCI_SERVER_BASE_URL: ${{ inputs.lhci_server_url }}
+      LHCI_TOKEN: ${{ inputs.lhci_token }}
+      LHCI_COLLECT__URL: ${{ inputs.domain }}
+
+
