@@ -11,6 +11,6 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^16.18.30"
+    "@types/node": "^20.17.27"
   }
 }

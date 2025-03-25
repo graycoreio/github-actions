@@ -17,7 +17,7 @@ inputs:
     default: '0.0.0-PLACEHOLDER'
 
 runs:
-  using: "node16"
+  using: "node20"
   main: dist/index.js
 
 branding:
