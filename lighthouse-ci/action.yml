@@ -33,7 +33,8 @@ runs:
       if [[ -n "$LIGHTHOUSE_CONFIG_PATH" ]]; then
         CMD+=" --config $LIGHTHOUSE_CONFIG_PATH"
       fi
-
+      echo "Running LHCI Command..."
+      echo "$CMD"
       eval "$CMD"
     shell: bash
     env:
