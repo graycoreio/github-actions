@@ -3,10 +3,6 @@ description: 'Run LHCI `autorun` against a target web application.'
 author: 'Graycore'
 
 inputs:
-  domain:
-    description: 'The domain you would like to target.'
-    required: true
-
   lhci_server_url:
     description: 'The server url of your lighthouse server.'
 
@@ -18,6 +14,10 @@ inputs:
       The type of target to upload the data to. If set to anything other than "lhci", some of the options will not apply. [choices: "lhci",  "temporary-public-storage", "filesystem"]
     required: false
     default: temporary-public-storage
+
+  domain:
+    description: A base domain that can be used in a ".lighthouserc.js" to configure collect urls.
+    required: false
 
   config_path: 
     description: The location of the lighthouse configuration file.
@@ -40,8 +40,8 @@ runs:
     env:
       LHCI_SERVER_BASE_URL: ${{ inputs.lhci_server_url }}
       LHCI_TOKEN: ${{ inputs.lhci_token }}
-      LHCI_COLLECT__URL: ${{ inputs.domain }}
       LHCI_UPLOAD__TARGET: ${{ inputs.target }}
       LIGHTHOUSE_CONFIG_PATH: ${{ inputs.config_path }}
+      LIGHTHOUSE_DOMAIN: ${{ inputs.domain }}
 
 

@@ -1,4 +1,4 @@
-const domain = process.env.LHCI_COLLECT__URL;
+const domain = process.env.LIGHTHOUSE_DOMAIN;
 
 module.exports = {
     ci: {
