@@ -23,6 +23,10 @@ inputs:
     description: The location of the lighthouse configuration file.
     required: false
 
+  gh_token:
+    description: The Github Token used to upload status checks to pull requests.
+    required: false
+
 runs:
   using: "composite"
   steps:
@@ -43,5 +47,4 @@ runs:
       LHCI_UPLOAD__TARGET: ${{ inputs.target }}
       LIGHTHOUSE_CONFIG_PATH: ${{ inputs.config_path }}
       LIGHTHOUSE_DOMAIN: ${{ inputs.domain }}
-
-
+      LHCI_GITHUB_APP_TOKEN: ${{ inputs.gh_token }}
