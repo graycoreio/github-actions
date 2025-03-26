@@ -13,4 +13,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
+      
       - uses: ./lighthouse-ci
+        with:
+          domain: https://www.example.com

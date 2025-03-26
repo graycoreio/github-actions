@@ -5,13 +5,19 @@ author: 'Graycore'
 inputs:
   domain:
     description: 'The domain you would like to target.'
-    default: 'https://www.example.com'
+    required: true
 
   lhci_server_url:
     description: 'The server url of your lighthouse server.'
 
   lhci_token:
     description: The token used to authenticate with your LHCI server.
+
+  target:
+    description: |
+      The type of target to upload the data to. If set to anything other than "lhci", some of the options will not apply. [choices: "lhci",  "temporary-public-storage", "filesystem"]
+    required: false
+    default: temporary-public-storage
 
 runs:
   using: "composite"
@@ -23,5 +29,6 @@ runs:
       LHCI_SERVER_BASE_URL: ${{ inputs.lhci_server_url }}
       LHCI_TOKEN: ${{ inputs.lhci_token }}
       LHCI_COLLECT__URL: ${{ inputs.domain }}
+      LHCI_UPLOAD__TARGET: ${{ inputs.target }}
 
 
