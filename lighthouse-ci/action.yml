@@ -30,17 +30,17 @@ runs:
     run: | 
       CMD="npx -p @lhci/cli lhci autorun"
 
-      if [[ -n "$INPUT_CONFIG_PATH" ]]; then
-        CMD+=" --config $INPUT_CONFIG_PATH"
+      if [[ -n "$LIGHTHOUSE_CONFIG_PATH" ]]; then
+        CMD+=" --config $LIGHTHOUSE_CONFIG_PATH"
       fi
 
       eval "$CMD"
-      set
     shell: bash
     env:
       LHCI_SERVER_BASE_URL: ${{ inputs.lhci_server_url }}
       LHCI_TOKEN: ${{ inputs.lhci_token }}
       LHCI_COLLECT__URL: ${{ inputs.domain }}
       LHCI_UPLOAD__TARGET: ${{ inputs.target }}
+      LIGHTHOUSE_CONFIG_PATH: ${{ inputs.config_path }}
 
 
