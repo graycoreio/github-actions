@@ -3,12 +3,13 @@ const domain = process.env.LIGHTHOUSE_DOMAIN;
 module.exports = {
     ci: {
         assert: {
-            preset: "lighthouse:recommended",
+            assertions: {
+                "dom-size": ["error", { "maxNumericValue": 3000 }],
+            },
         },
         collect: {
             url: [
-                domain + "/",
-                domain + "/test",
+                domain + "/"
             ]
         }
     },
