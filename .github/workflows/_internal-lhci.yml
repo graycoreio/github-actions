@@ -18,3 +18,4 @@ jobs:
         with:
           domain: https://www.example.com
           config_path: .github/workflows/lhci/.lighthouserc.js
+          target: temporary-public-storage
