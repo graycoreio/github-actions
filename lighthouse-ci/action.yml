@@ -46,4 +46,4 @@ runs:
       LHCI_UPLOAD__TARGET: ${{ inputs.target }}
       LIGHTHOUSE_CONFIG_PATH: ${{ inputs.config_path }}
       LIGHTHOUSE_DOMAIN: ${{ inputs.domain }}
-      LHCI_GITHUB_APP_TOKEN: ${{ inputs.gh_token }}
+      LHCI_UPLOAD__GITHUB_TOKEN: ${{ inputs.gh_token }}
