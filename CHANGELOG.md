@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/graycoreio/github-actions/compare/v2.0.0...v2.1.0) (2025-03-27)
+
+
+### Features
+
+* **lighthouse-ci:** add github action for lighthouse ci ([#6](https://github.com/graycoreio/github-actions/issues/6)) ([13671e4](https://github.com/graycoreio/github-actions/commit/13671e46c75d5cbc5810aae067b4765195c67bc1))
+
 ## [2.0.0](https://github.com/graycoreio/github-actions/compare/v1.0.0...v2.0.0) (2025-03-25)
 
 
