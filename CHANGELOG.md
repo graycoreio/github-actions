@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.0](https://github.com/graycoreio/github-actions/compare/v2.1.0...v2.2.0) (2025-03-31)
+
+
+### Features
+
+* **angular-universal-vercel:** properly handle angular 18/19 inputs ([b660fc4](https://github.com/graycoreio/github-actions/commit/b660fc498f63ae32398350903cf22bc218fdb70a))
+
+
+### Bug Fixes
+
+* **angular-universal-vercel:** replace echo w/ implementation ([5e2f1b8](https://github.com/graycoreio/github-actions/commit/5e2f1b89fe88b02bc563d28345ebd6d7c01cefda))
+
 ## [2.1.0](https://github.com/graycoreio/github-actions/compare/v2.0.0...v2.1.0) (2025-03-27)
 
 
