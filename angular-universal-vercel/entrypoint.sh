@@ -12,9 +12,9 @@ cp -R "${GITHUB_WORKSPACE}/." "/app"
 
 echo "Copy appropriate serverless files to /api for Angular $INPUT_NG_VERSION"
 if [ "$INPUT_NG_VERSION" -ge 17 ]; then
-    echo "17"
+  cp -R /v17/* /app
 else
-    echo "16"
+  cp -R /v16/* /app 
 fi
 
 echo "Switch current working directory to app"
