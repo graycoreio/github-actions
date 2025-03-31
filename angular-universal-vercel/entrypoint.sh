@@ -1,15 +1,20 @@
 #!/bin/bash
 set -e
 
+# Ensure INPUT_NG_VERSION is a number
+if ! [[ "$INPUT_NG_VERSION" =~ ^[0-9]+$ ]]; then
+    echo "Error: INPUT_NG_VERSION must be a number" >&2
+    exit 1
+fi
+
 echo "Copy workspace files to /app"
 cp -R "${GITHUB_WORKSPACE}/." "/app"
 
 echo "Copy appropriate serverless files to /api for Angular $INPUT_NG_VERSION"
-if [ "$INPUT_NG_VERSION" == "17" ]
-then
-    cp -R /v17/* /app
+if [ "$INPUT_NG_VERSION" -ge 17 ]; then
+    echo "17"
 else
-    cp -R /v16/* /app 
+    echo "16"
 fi
 
 echo "Switch current working directory to app"
