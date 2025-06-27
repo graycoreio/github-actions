@@ -1,7 +1,12 @@
-# Set Version From Root
+# Upload Algolia Index
 
-This action allows you to set the versions defined in your project from a root package version, allowing you to ensure that all packages within a project remain at compatible versions.
+This action uploads a set of records to a specified algolia index.
 
-It is intended to be used after a build, immediately before a publish.
-
-It currently includes a modicum of validation to ensure that you don't accidentally publish invalid content onto your registry.
+```yml
+- uses: graycoreio/github-actions/upload-algolia-index@main
+  with:
+    appId: ${{ secrets.ALGOLIA_APP_ID }}
+    apiKey: ${{ secrets.ALGOLIA_API_KEY }}
+    indexName: my_index_name
+    dir: ${{ github.workspace }}/my/index/records
+```
