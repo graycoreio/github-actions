@@ -1,7 +1,6 @@
 import * as core from '@actions/core';
-import * as glob from '@actions/glob';
-import * as fs from 'fs/promises';
-import { searchClient } from "@algolia/client-search";
+import { upload } from './upload';
+import { getRecords } from './get-records';
 
 export async function run(): Promise<void> {
   try {
@@ -12,39 +11,16 @@ export async function run(): Promise<void> {
     const globPattern: string = core.getInput('glob')
     const objectIdKey: string = core.getInput('objectIdKey')
 
-    const globber = await glob.create(`${dir}/${globPattern}`)
-    const client = searchClient(
+    await upload(
       appId,
-      apiKey
-    );
-
-    let records: Array<{
-      objectID: string;
-      body: Record<string, unknown>
-    }> = []
-    for await (const path of globber.globGenerator()) {
-      if ((await fs.stat(path)).isFile()) {
-        const obj = JSON.parse(await fs.readFile(path, 'utf8'))
-        const objectID = obj[objectIdKey]
-
-        if (!objectID) {
-          core.warning(`Object ID not found for ${path} using key ${objectIdKey}`)
-        }
-
-        records.push({
-          objectID,
-          body: obj
-        })
-      }
-    }
-    core.notice(`Found ${records.length} records to upload.`)
-
-    core.debug('Beginning upload.')
-    await client.saveObjects({
       indexName,
-      objects: records
-    });
-    core.debug(`Finished upload.`)
+      apiKey,
+      await getRecords(
+        dir,
+        globPattern,
+        objectIdKey
+      )
+    )
   }
   catch (error) {
     if (error instanceof Error) {
