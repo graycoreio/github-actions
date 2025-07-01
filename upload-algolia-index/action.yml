@@ -1,0 +1,33 @@
+name: 'Upload Algolia Index'
+author: 'Graycore'
+description: 'An action that uploads a set of search indices to the Algolia search engine.'
+
+inputs:
+  appId:
+    description: 'The ID of the Algolia application.'
+    required: true
+  indexName:
+    description: 'The name of the Algolia index.'
+    required: true
+  apiKey:
+    description: 'The Algolia API key.'
+    required: true
+  dir:
+    description: 'The directory containing the records to upload to the index. Should be absolute.'
+    required: true
+  glob:
+    description: 'An optional glob pattern to select which records are uploaded.'
+    required: false
+    default: '**/*'
+  objectIdKey:
+    description: 'The field on the records that contains the unique object ID.'
+    required: false
+    default: 'id'
+
+runs:
+  using: "node20"
+  main: dist/index.js
+
+branding:
+  icon: "code"
+  color: "green"

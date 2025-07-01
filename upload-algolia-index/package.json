@@ -1,0 +1,19 @@
+{
+  "name": "@graycore/github-actions-set-versions-from-root",
+  "version": "1.0.0",
+  "description": "A Github Action that sets versions in left packages from a root version.",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "build": "npx esbuild --outfile=dist/index.js --platform=node --bundle --minify src/index.ts && tsc --noEmit",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.19.1"
+  },
+  "dependencies": {
+    "@algolia/client-search": "^5.29.0"
+  }
+}
