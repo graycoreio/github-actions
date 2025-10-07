@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.0](https://github.com/graycoreio/github-actions/compare/v2.2.0...v2.3.0) (2025-10-07)
+
+
+### Features
+
+* add `upload-algolia-index` action ([#9](https://github.com/graycoreio/github-actions/issues/9)) ([bdc1bf2](https://github.com/graycoreio/github-actions/commit/bdc1bf21d449d5629f930793e3d11e3158098d6e))
+* **set-versions-from-root:** set versions for dependencies ([75453cd](https://github.com/graycoreio/github-actions/commit/75453cdb5c238adb5a25ed2142a9fcda96dd9f59))
+
 ## [2.2.0](https://github.com/graycoreio/github-actions/compare/v2.1.0...v2.2.0) (2025-03-31)
 
 
