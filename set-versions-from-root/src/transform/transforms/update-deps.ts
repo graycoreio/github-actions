@@ -18,5 +18,8 @@ export const updateDependenciesFromRoot = (lib: PackageJson, rootPackage: Packag
     if (lib.optionalDependencies) {
         lib.optionalDependencies = updateObjectFromObject(lib.optionalDependencies, rootDeps);
     }
+    if (lib.dependencies) {
+        lib.dependencies = updateObjectFromObject(lib.dependencies, rootDeps);
+    }
     return lib;
 };
