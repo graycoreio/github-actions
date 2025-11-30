@@ -7,14 +7,22 @@ if ! [[ "$INPUT_NG_VERSION" =~ ^[0-9]+$ ]]; then
     exit 1
 fi
 
+# Ensure INPUT_NG_SSR_ENGINE is valid
+if [ "$INPUT_NG_SSR_ENGINE" != "CommonEngine" ] && [ "$INPUT_NG_SSR_ENGINE" != "AngularNodeAppEngine" ]; then
+    echo "Error: INPUT_NG_SSR_ENGINE must be 'CommonEngine' or 'AngularNodeAppEngine'" >&2
+    exit 1
+fi
+
 echo "Copy workspace files to /app"
 cp -R "${GITHUB_WORKSPACE}/." "/app"
 
-echo "Copy appropriate serverless files to /api for Angular $INPUT_NG_VERSION"
-if [ "$INPUT_NG_VERSION" -ge 17 ]; then
+echo "Copy appropriate serverless files to /api for Angular $INPUT_NG_VERSION with $INPUT_NG_SSR_ENGINE"
+if [ "$INPUT_NG_VERSION" -ge 20 ]; then
+  cp -R /v20/$INPUT_NG_SSR_ENGINE/* /app
+elif [ "$INPUT_NG_VERSION" -ge 17 ]; then
   cp -R /v17/* /app
 else
-  cp -R /v16/* /app 
+  cp -R /v16/* /app
 fi
 
 echo "Switch current working directory to app"

@@ -20,6 +20,10 @@ inputs:
     description: "Your Angular Version"
     required: false
     default: '19'
+  ng-ssr-engine:
+    description: "Which version of the Angular's SSR engine that you're using. One of 'CommonEngine' or 'AngularNodeAppEngine'"
+    required: false
+    default: 'CommonEngine'
 
 outputs:
   url:
@@ -74,3 +78,4 @@ runs:
       vercel_org: ${{ inputs.vercel-org }}
       vercel_project_id: ${{ inputs.vercel-project-id }}
       ng_version: ${{ inputs.ng-version }}
+      ng_ssr_engine: ${{ inputs.ng-ssr-engine }}

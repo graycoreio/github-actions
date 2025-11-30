@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "public": true,
+  "functions": {
+    "api/serverless.js": {
+      "includeFiles": "{server/*.*,browser/{*.html,*.css},browser/**/*.json}"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*[.].+)",
+      "destination": "/browser/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "api/serverless"
+    }
+  ]
+}

@@ -22,6 +22,10 @@ inputs:
     description: "Your Angular Version"
     required: false
     default: '19'
+  ng_ssr_engine:
+    description: "Which version of the Angular's SSR engine that you're using. One of 'CommonEngine' or 'AngularNodeAppEngine'"
+    required: false
+    default: 'CommonEngine'
 
 outputs:
   url: 
