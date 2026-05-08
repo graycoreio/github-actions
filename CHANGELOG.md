@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.0](https://github.com/graycoreio/github-actions/compare/v2.3.0...v2.4.0) (2026-05-08)
+
+
+### Features
+
+* **setup-node:** add `npm-version` input ([#11](https://github.com/graycoreio/github-actions/issues/11)) ([022be38](https://github.com/graycoreio/github-actions/commit/022be38737b57dbbea63fa6dd09d960c3c45b414))
+
 ## [2.3.0](https://github.com/graycoreio/github-actions/compare/v2.2.0...v2.3.0) (2025-11-30)
 
 
