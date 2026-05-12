@@ -7,6 +7,12 @@ on:
     paths:
       - 'setup-node/**'
       - '.github/workflows/_internal-setup-node.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'setup-node/**'
+      - '.github/workflows/_internal-setup-node.yml'
 
 jobs:
   minimal:
