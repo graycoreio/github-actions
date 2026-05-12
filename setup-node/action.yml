@@ -24,11 +24,12 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v6
       name: Set Node Version
       with:
         node-version: ${{ inputs.node-version }}
         registry-url: ${{ inputs.registry-url }}
+        package-manager-cache: false
 
     - run: |
         npx npm -g i npm@${{ inputs.npm-version }}
