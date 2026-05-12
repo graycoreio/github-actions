@@ -15,7 +15,7 @@ inputs:
     description: 'Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file, and set up auth to read in from env.NODE_AUTH_TOKEN.'
   working-directory:
     description: 'The working directory of setup'
-    default: ''
+    default: '.'
 
 
 runs:
