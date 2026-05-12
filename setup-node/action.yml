@@ -7,7 +7,7 @@ inputs:
     required: true
   npm-version:
     description: 'The version of npm to install'
-    default: 'latest'
+    default: ''
   use-stamp-cache:
     description: 'Whether or not to use the stamp cache (skip install, use old node_modules)'
     default: 'false'
@@ -27,10 +27,13 @@ runs:
         node-version: ${{ inputs.node-version }}
         registry-url: ${{ inputs.registry-url }}
 
-    - run: npx npm -g i npm@${{ inputs.npm-version }}
+    - run: |
+        npx npm -g i npm@${{ inputs.npm-version }}
+        npm -v
       working-directory: ${{ inputs.working-directory }}
       shell: bash
       name: Upgrade npm
+      if: inputs.npm-version != ''
 
     - name: Get npm cache directory
       id: npm-cache-dir
