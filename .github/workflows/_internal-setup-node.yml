@@ -1,0 +1,121 @@
+name: setup-node Test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'setup-node/**'
+      - '.github/workflows/_internal-setup-node.yml'
+
+jobs:
+  minimal:
+    name: Minimal (node-version only)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - uses: ./setup-node
+        with:
+          node-version: '24'
+
+      - name: Assert node + npm available
+        shell: bash
+        run: |
+          node -v
+          npm -v
+
+  node-version-matrix:
+    name: node-version=${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22', '24']
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - uses: ./setup-node
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Assert major matches
+        shell: bash
+        env:
+          EXPECTED: ${{ matrix.node }}
+        run: |
+          ACTUAL=$(node -v | sed 's/^v\([0-9]*\).*/\1/')
+          test "$ACTUAL" = "$EXPECTED"
+
+  npm-version:
+    name: npm-version pinned
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - uses: ./setup-node
+        with:
+          node-version: '22'
+          npm-version: '11.5.0'
+
+      - name: Assert npm version matches
+        shell: bash
+        run: |
+          test "$(npm -v)" = "11.5.0"
+
+  stamp-cache:
+    name: use-stamp-cache=true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - uses: ./setup-node
+        with:
+          node-version: '24'
+          use-stamp-cache: 'true'
+
+      - name: Assert node_modules populated
+        shell: bash
+        run: |
+          test -d node_modules
+          test -d node_modules/typescript
+
+  working-directory:
+    name: working-directory=subdir
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Seed isolated project
+        shell: bash
+        run: |
+          mkdir -p subproject
+          cat > subproject/package.json <<'JSON'
+          {
+            "name": "subproject",
+            "version": "1.0.0",
+            "dependencies": { "is-odd": "3.0.1" }
+          }
+          JSON
+          (cd subproject && npm install --package-lock-only --no-audit)
+
+      - uses: ./setup-node
+        with:
+          node-version: '24'
+          working-directory: subproject
+
+      - name: Assert install ran in subdir
+        shell: bash
+        run: |
+          test -d subproject/node_modules/is-odd
+          test ! -d node_modules/is-odd || (echo "install leaked to root" && exit 1)
