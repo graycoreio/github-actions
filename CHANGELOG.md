@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.5.0](https://github.com/graycoreio/github-actions/compare/v2.4.0...v2.5.0) (2026-05-12)
+
+
+### Features
+
+* **setup-node:** add npm version to stamp cache key ([#16](https://github.com/graycoreio/github-actions/issues/16)) ([58985a3](https://github.com/graycoreio/github-actions/commit/58985a38360c5f4e73ef2e42e982eed728988e2d))
+* **setup-node:** change default working dir to `'.'` ([#13](https://github.com/graycoreio/github-actions/issues/13)) ([251e194](https://github.com/graycoreio/github-actions/commit/251e194d60130c379a648ec8087e137288e67c62))
+* **setup-node:** make installing configurable and on by default ([90cde2e](https://github.com/graycoreio/github-actions/commit/90cde2e0d665ecc6aa0df06f43af0929c91eec2e))
+* **setup-node:** only upgrade npm if version is specified ([#15](https://github.com/graycoreio/github-actions/issues/15)) ([3392c78](https://github.com/graycoreio/github-actions/commit/3392c780e11fd4eefff3b496f39832c71e645fb0))
+* **setup-node:** prevent cache save on pull_request_target ([c45d57f](https://github.com/graycoreio/github-actions/commit/c45d57f072a4f03dd09b778972c309d438a27af3))
+* **setup-node:** upgrade to actions/setup-node@v6 ([9fbcb8b](https://github.com/graycoreio/github-actions/commit/9fbcb8b880a6f242eb169163c1e13aef4902edeb))
+* **setup-node:** use npm version command output for stamp cache key ([#17](https://github.com/graycoreio/github-actions/issues/17)) ([f759918](https://github.com/graycoreio/github-actions/commit/f75991884173cb56c9b87deb296ab425146dd201))
+
+
+### Bug Fixes
+
+* **setup-node:** calculate npm verion in cache-key ([551b54f](https://github.com/graycoreio/github-actions/commit/551b54f1839da682bc5ff080af967a9d586c3f1a))
+* **setup-node:** only skip npm ci on stamp cache ([4baea06](https://github.com/graycoreio/github-actions/commit/4baea06c2b7a774888bd256d52dba4a9fb624848))
+
 ## [2.4.0](https://github.com/graycoreio/github-actions/compare/v2.3.0...v2.4.0) (2026-05-08)
 
 
