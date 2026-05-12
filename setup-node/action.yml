@@ -29,12 +29,13 @@ runs:
 
     - run: |
         npx npm -g i npm@${{ inputs.npm-version }}
-        echo "npm_version=$(npm -v)" >> ${GITHUB_OUTPUT}
-      working-directory: ${{ inputs.working-directory }}
+      shell: bash
+      if: inputs.npm-version != ''
+
+    - run: echo "npm_version=$(npm -v)" >> ${GITHUB_OUTPUT}
       shell: bash
       name: Upgrade npm
-      id: npm-upgrade
-      if: inputs.npm-version != ''
+      id: get-npm-version
 
     - name: Get npm cache directory
       id: npm-cache-dir
@@ -54,7 +55,7 @@ runs:
       shell: bash
       env:
         NODE_VERSION: ${{ inputs.node-version }}
-        NPM_VERSION: ${{ steps.npm-upgrade.outputs.npm_version }}
+        NPM_VERSION: ${{ steps.get-npm-version.outputs.npm_version }}
         PACKAGE_HASH: ${{ hashFiles('**/package-lock.json') }}
         OS: ${{ runner.os }}
         STAMP: ${{ inputs.use-stamp-cache }}
