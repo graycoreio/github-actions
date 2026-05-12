@@ -95,9 +95,11 @@ runs:
       working-directory: ${{ inputs.working-directory }}
       shell: bash
       name: Install Dependencies
-      if: | 
-        (inputs.install == 'true') && 
-        !(steps.npm-cache.outputs.cache-hit == 'true' || steps.npm-cache-restore.outputs.cache-hit == 'true')
+      if: |
+        (inputs.install == 'true') && !(
+          inputs.use-stamp-cache == 'true' &&
+          (steps.npm-cache.outputs.cache-hit == 'true' || steps.npm-cache-restore.outputs.cache-hit == 'true')
+        )
 
     - run: |
         rm -rf node_modules/.ng-packagr-ngcc
@@ -106,7 +108,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
       shell: bash
       name: Clear nx and angular junk
-      if: | 
-        (inputs.install == 'true' && inputs.use-stamp-cache) && 
+      if: |
+        (inputs.install == 'true' && inputs.use-stamp-cache == 'true') &&
         (steps.npm-cache.outputs.cache-hit == 'true' || steps.npm-cache-restore.outputs.cache-hit == 'true')
 
