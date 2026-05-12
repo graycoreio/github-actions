@@ -69,8 +69,18 @@ runs:
           echo "restore=npm-$OS-$NODE_VERSION-$NPM_VERSION-" >> ${GITHUB_OUTPUT}
         fi
 
-    - uses: actions/cache@v3
+    - uses: actions/cache@v5
       id: npm-cache
+      if: github.event_name != 'pull_request_target'
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ steps.npm-cache-keys.outputs.key }}
+        restore-keys: |
+          ${{ steps.npm-cache-keys.outputs.restore }}
+
+    - uses: actions/cache/restore@v5
+      id: npm-cache-restore
+      if: github.event_name == 'pull_request_target'
       with:
         path: ${{ steps.npm-cache-dir.outputs.dir }}
         key: ${{ steps.npm-cache-keys.outputs.key }}
@@ -81,7 +91,9 @@ runs:
       working-directory: ${{ inputs.working-directory }}
       shell: bash
       name: Install Dependencies
-      if: inputs.use-stamp-cache && steps.npm-cache.outputs.cache-hit != 'true'
+      if: | 
+        (inputs.use-stamp-cache) && 
+        !(steps.npm-cache.outputs.cache-hit == 'true' || steps.npm-cache-restore.outputs.cache-hit == 'true')
 
     - run: |
         rm -rf node_modules/.ng-packagr-ngcc
@@ -90,5 +102,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
       shell: bash
       name: Clear nx and angular junk
-      if: inputs.use-stamp-cache && steps.npm-cache.outputs.cache-hit == 'true'
+      if: | 
+        (inputs.use-stamp-cache) && 
+        (steps.npm-cache.outputs.cache-hit == 'true' || steps.npm-cache-restore.outputs.cache-hit == 'true')
 
