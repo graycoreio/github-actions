@@ -53,17 +53,18 @@ runs:
       shell: bash
       env:
         NODE_VERSION: ${{ inputs.node-version }}
+        NPM_VERSION: ${{ inputs.npm-version }}
         PACKAGE_HASH: ${{ hashFiles('**/package-lock.json') }}
         OS: ${{ runner.os }}
         STAMP: ${{ inputs.use-stamp-cache }}
       run: |
         if [ "$STAMP" == "true" ]
         then
-          echo "key=npm-stamp-$OS-$NODE_VERSION-$PACKAGE_HASH" >> ${GITHUB_OUTPUT}
-          echo "restore=npm-stamp-$OS-$NODE_VERSION-" >> ${GITHUB_OUTPUT}
+          echo "key=npm-stamp-$OS-$NODE_VERSION-$NPM_VERSION-$PACKAGE_HASH" >> ${GITHUB_OUTPUT}
+          echo "restore=npm-stamp-$OS-$NODE_VERSION-$NPM_VERSION-" >> ${GITHUB_OUTPUT}
         else
-          echo "key=npm-$OS-$NODE_VERSION-$PACKAGE_HASH" >> ${GITHUB_OUTPUT}
-          echo "restore=npm-$OS-$NODE_VERSION-" >> ${GITHUB_OUTPUT}
+          echo "key=npm-$OS-$NODE_VERSION-$NPM_VERSION-$PACKAGE_HASH" >> ${GITHUB_OUTPUT}
+          echo "restore=npm-$OS-$NODE_VERSION-$NPM_VERSION-" >> ${GITHUB_OUTPUT}
         fi
 
     - uses: actions/cache@v3
