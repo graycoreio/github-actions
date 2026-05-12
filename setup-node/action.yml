@@ -16,6 +16,9 @@ inputs:
   working-directory:
     description: 'The working directory of setup'
     default: '.'
+  install: 
+    description: 'Whether or not to run npm ci'
+    default: 'true'
 
 
 runs:
@@ -87,12 +90,12 @@ runs:
         restore-keys: |
           ${{ steps.npm-cache-keys.outputs.restore }}
 
-    - run: npx npm ci --prefer-offline --no-audit --no-shrinkwrap
+    - run: npx npm ci --prefer-offline --no-audit
       working-directory: ${{ inputs.working-directory }}
       shell: bash
       name: Install Dependencies
       if: | 
-        (inputs.use-stamp-cache) && 
+        (inputs.install == 'true') && 
         !(steps.npm-cache.outputs.cache-hit == 'true' || steps.npm-cache-restore.outputs.cache-hit == 'true')
 
     - run: |
@@ -103,6 +106,6 @@ runs:
       shell: bash
       name: Clear nx and angular junk
       if: | 
-        (inputs.use-stamp-cache) && 
+        (inputs.install == 'true' && inputs.use-stamp-cache) && 
         (steps.npm-cache.outputs.cache-hit == 'true' || steps.npm-cache-restore.outputs.cache-hit == 'true')
 
