@@ -16,7 +16,7 @@ inputs:
   working-directory:
     description: 'The working directory of setup'
     default: '.'
-  install: 
+  install:
     description: 'Whether or not to run npm ci'
     default: 'true'
 
@@ -32,13 +32,17 @@ runs:
         package-manager-cache: false
 
     - run: |
-        npx npm -g i npm@${{ inputs.npm-version }}
+        npx npm config set prefix "${HOME}/.npm-global"
+        npx npm install -g npm@${{ inputs.npm-version }}
+        echo "${HOME}/.npm-global/bin" >> $GITHUB_PATH
+      working-directory: ${{ inputs.working-directory }}
       shell: bash
       if: inputs.npm-version != ''
+      name: Upgrade npm
 
     - run: echo "npm_version=$(npm -v)" >> ${GITHUB_OUTPUT}
       shell: bash
-      name: Upgrade npm
+      name: Get npm version
       id: get-npm-version
 
     - name: Get npm cache directory
