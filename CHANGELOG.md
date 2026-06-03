@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.1](https://github.com/graycoreio/github-actions/compare/v2.5.0...v2.5.1) (2026-05-29)
+
+
+### Bug Fixes
+
+* **setup-node:** cannot install npm into system folder ([#19](https://github.com/graycoreio/github-actions/issues/19)) ([0874b0c](https://github.com/graycoreio/github-actions/commit/0874b0c34017c2e6655df66d431630d8e3d2890f))
+
 ## [2.5.0](https://github.com/graycoreio/github-actions/compare/v2.4.0...v2.5.0) (2026-05-12)
 
 
