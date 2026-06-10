@@ -1,6 +1,6 @@
-name: "Compute Supported Magento 2 Versions"
+name: "Set Package Versions from Root"
 author: "Graycore"
-description: "A Github Action that computes the Github Actions matrix for the chosen versions of Magento 2"
+description: "A Github Action that sets package dependency versions from versions defined in the root of the monorepo."
 
 inputs:
   root-package-path:
