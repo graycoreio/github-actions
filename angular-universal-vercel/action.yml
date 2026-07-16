@@ -23,9 +23,13 @@ inputs:
     required: false
     default: '19'
   ng_ssr_engine:
-    description: "Which version of the Angular's SSR engine that you're using. One of 'CommonEngine' or 'AngularNodeAppEngine'"
+    description: "Which version of the Angular's SSR engine that you're using. One of 'CommonEngine' or 'AngularNodeAppEngine'. Ignored when ng_output_mode is 'static'"
     required: false
     default: 'CommonEngine'
+  ng_output_mode:
+    description: "The Angular application builder outputMode. One of 'server' or 'static'. 'static' deploys the prerendered browser output via the Vercel Build Output API without a serverless function"
+    required: false
+    default: 'server'
 
 outputs:
   url: 
