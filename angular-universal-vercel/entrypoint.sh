@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+# Default inputs that may be unset when an older action.yml (which doesn't
+# declare them) runs against the latest image.
+INPUT_NG_VERSION="${INPUT_NG_VERSION:-19}"
+INPUT_NG_SSR_ENGINE="${INPUT_NG_SSR_ENGINE:-CommonEngine}"
+INPUT_NG_OUTPUT_MODE="${INPUT_NG_OUTPUT_MODE:-server}"
+
 # Ensure INPUT_NG_VERSION is a number
 if ! [[ "$INPUT_NG_VERSION" =~ ^[0-9]+$ ]]; then
     echo "Error: INPUT_NG_VERSION must be a number" >&2
