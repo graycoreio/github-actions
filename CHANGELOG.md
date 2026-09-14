@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.6.0](https://github.com/graycoreio/github-actions/compare/v2.5.1...v2.6.0) (2026-07-17)
+
+
+### Features
+
+* **angular-universal-vercel:** allow static app deploys ([fe14abe](https://github.com/graycoreio/github-actions/commit/fe14abe5d400ff99c2ee85a1429f184a39df4461))
+* **angular-universal-vercel:** handle backwards compatible inputs ([5c09887](https://github.com/graycoreio/github-actions/commit/5c09887259d311b1e0efb08c6ded03067c9c4dd6))
+* **angular-universal-vercel:** remove public from vercel.json ([f60e8fe](https://github.com/graycoreio/github-actions/commit/f60e8fed31549050ec68434be4fbf78a56bf528a))
+* **angular-universal-vercel:** upgrade to node 24 ([42e2311](https://github.com/graycoreio/github-actions/commit/42e2311777edc5fccfd800c859bea9d8672c2ec2))
+* upgrade to release-please v5 ([b224365](https://github.com/graycoreio/github-actions/commit/b2243653e9de002fbfe7e91ee37a58ad78adbe63))
+
 ## [2.5.1](https://github.com/graycoreio/github-actions/compare/v2.5.0...v2.5.1) (2026-05-29)
 
 
