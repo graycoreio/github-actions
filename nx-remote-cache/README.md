@@ -11,8 +11,8 @@ It has two modes:
 
 | | `mode: remote` | `mode: local` |
 |---|---|---|
-| Server | Hosted (Azure Container Apps, `deploy/main.bicep`) | Started by this action inside the job, as a container |
-| Infrastructure | Container App, Entra app registration, storage, CI identities | Storage and CI identities only (`deploy/ci.bicep`) |
+| Server | Hosted (Azure Container Apps, `deploy/hosted.bicep`) | Started by this action inside the job, as a container |
+| Infrastructure | Container App, Entra app registration, storage, CI identities | Storage and CI identities only (`deploy/local.bicep`) |
 | Who decides read/write | The server, from the Entra token's roles | Azure Storage, from the identity's role on the container |
 | Runners | Any | Linux (needs Docker) |
 
