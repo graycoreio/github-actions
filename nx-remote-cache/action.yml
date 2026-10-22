@@ -1,0 +1,206 @@
+name: Nx remote cache
+description: >
+  Connect Nx to an nx-remote-cache: a hosted server (mode: remote), or a server started inside
+  this job that talks to Azure Blob Storage with the job's identity (mode: local). Exchanges the
+  job's GitHub OIDC token and exports NX_SELF_HOSTED_REMOTE_CACHE_SERVER /
+  NX_SELF_HOSTED_REMOTE_CACHE_ACCESS_TOKEN. The job needs `permissions: id-token: write`.
+
+inputs:
+  mode:
+    description: >
+      `remote`: use a hosted nx-remote-cache server at `server-url`.
+      `local`: start the server inside this job (needs Docker, i.e. a Linux runner).
+    default: remote
+  access:
+    description: >
+      `auto` (write only for a push to the default branch, read otherwise), `read` or `write`.
+      Only selects which identity to ask for; Azure (federated credentials and role
+      assignments) or the server's mint rules decide what is actually granted.
+    default: auto
+  tenant-id:
+    description: "[remote with entra, local] Directory (tenant) id."
+  writer-client-id:
+    description: "[remote with entra, local] Client id of the writer managed identity."
+  reader-client-id:
+    description: "[remote with entra, local] Client id of the reader managed identity."
+  server-url:
+    description: "[remote] Base URL of the cache server."
+  provider:
+    description: "[remote] `entra` (Entra ID issues the token) or `mint` (the server's /v1/token/github)."
+    default: entra
+  api-scope:
+    description: "[remote with entra] Scope for the cache API, e.g. api://<tenant id>/nx-remote-cache/.default"
+  github-audience:
+    description: "[remote with mint] Audience the server expects on the GitHub OIDC token (defaults to server-url)."
+  anonymous-read:
+    description: >
+      [remote] Set to `true` only if the server enables anonymous reads. Jobs without an OIDC
+      token (fork PRs) then still read the cache; otherwise the remote cache is left off for
+      them, because Nx fails the whole run when the server rejects a request with 401.
+    default: 'false'
+  storage-account:
+    description: "[local] Storage account name."
+  storage-container:
+    description: "[local] Blob container holding the cache."
+  storage-prefix:
+    description: "[local] Virtual directory for entries inside the container."
+    default: v1
+  image:
+    description: "[local] Server image to run."
+    default: ghcr.io/graycoreio/nx-remote-cache:0.2.0
+
+runs:
+  using: composite
+  steps:
+    - name: Configure Nx remote cache
+      shell: bash
+      env:
+        MODE: ${{ inputs.mode }}
+        ACCESS: ${{ inputs.access }}
+        TENANT_ID: ${{ inputs.tenant-id }}
+        WRITER_CLIENT_ID: ${{ inputs.writer-client-id }}
+        READER_CLIENT_ID: ${{ inputs.reader-client-id }}
+        SERVER_URL: ${{ inputs.server-url }}
+        PROVIDER: ${{ inputs.provider }}
+        API_SCOPE: ${{ inputs.api-scope }}
+        GITHUB_AUDIENCE: ${{ inputs.github-audience }}
+        ANONYMOUS_READ: ${{ inputs.anonymous-read }}
+        STORAGE_ACCOUNT: ${{ inputs.storage-account }}
+        STORAGE_CONTAINER: ${{ inputs.storage-container }}
+        STORAGE_PREFIX: ${{ inputs.storage-prefix }}
+        IMAGE: ${{ inputs.image }}
+        DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      run: |
+        set -euo pipefail
+
+        case "$MODE" in
+          remote|local) ;;
+          *) echo "::error::unknown mode '$MODE' (expected remote or local)"; exit 1 ;;
+        esac
+
+        if [ -z "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" ]; then
+          # Fork PRs get no OIDC token. A remote server may still allow anonymous reads; a local
+          # server has no way to reach storage. Otherwise leave the cache off: pointing Nx at a
+          # server that answers 401 would fail the whole run.
+          if [ "$MODE" = remote ] && [ "$ANONYMOUS_READ" = true ]; then
+            echo "NX_SELF_HOSTED_REMOTE_CACHE_SERVER=${SERVER_URL%/}" >> "$GITHUB_ENV"
+            echo "::notice::No OIDC token available (fork PR, or missing 'id-token: write'); reading the cache anonymously."
+          else
+            echo "::notice::No OIDC token available (fork PR, or missing 'id-token: write'); remote cache disabled for this job."
+          fi
+          exit 0
+        fi
+
+        # POST/GET that fails with the service's own error message instead of curl's bare
+        # "returned error: 400". Entra's errors say exactly what is wrong, e.g. AADSTS70021
+        # quotes the subject GitHub presented when no federated credential matches it.
+        fetch() {
+          local out code body
+          out=$(curl -sS -w '\n%{http_code}' "$@") || { echo "::error::request to ${*: -1} failed" >&2; return 1; }
+          code=${out##*$'\n'}
+          body=${out%$'\n'*}
+          if [ "$code" != 200 ]; then
+            echo "::error::HTTP $code from ${*: -1}: $(jq -r '.error_description // .message // .' <<<"$body" 2>/dev/null || echo "$body")" >&2
+            return 1
+          fi
+          printf '%s' "$body"
+        }
+
+        github_oidc() {
+          fetch -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=$1" | jq -er .value
+        }
+
+        want="read"
+        if [ "$ACCESS" = write ] || { [ "$ACCESS" = auto ] && [ "$GITHUB_EVENT_NAME" = push ] && [ "$GITHUB_REF" = "refs/heads/$DEFAULT_BRANCH" ]; }; then
+          want="write"
+        fi
+        client_id="$READER_CLIENT_ID"
+        [ "$want" = write ] && client_id="$WRITER_CLIENT_ID"
+
+        if [ "$MODE" = local ]; then
+          : "${TENANT_ID:?tenant-id is required}" "${client_id:?writer/reader client id is required}"
+          : "${STORAGE_ACCOUNT:?storage-account is required in local mode}" "${STORAGE_CONTAINER:?storage-container is required in local mode}"
+          command -v docker >/dev/null || { echo "::error::mode: local needs Docker (a Linux runner)"; exit 1; }
+
+          # The server exchanges this GitHub OIDC token with Entra for a storage token of the
+          # chosen identity (the Azure SDK's workload identity flow). What the job can do in
+          # storage is that identity's role on the container, enforced by Azure.
+          dir="$RUNNER_TEMP/nx-remote-cache"
+          mkdir -p "$dir"
+          chmod 755 "$dir"
+          github_oidc api://AzureADTokenExchange > "$dir/github-oidc-token"
+          chmod 644 "$dir/github-oidc-token" # the image runs as a non-root user
+
+          # Nx authenticates to the local server with a token made up for this job; its scope
+          # makes uploads from reader jobs a clean 403 (which Nx skips) rather than a storage error.
+          token=$(openssl rand -hex 32)
+          scope="read"
+          [ "$want" = write ] && scope="read_write"
+          config="[server]
+        listen = \"0.0.0.0:3000\"
+        [storage]
+        type = \"azure\"
+        account = \"$STORAGE_ACCOUNT\"
+        container = \"$STORAGE_CONTAINER\"
+        prefix = \"$STORAGE_PREFIX\"
+        auth = { mode = \"workload_identity\", tenant_id = \"$TENANT_ID\", client_id = \"$client_id\" }
+        [[auth.providers]]
+        type = \"static\"
+        tokens = [{ name = \"ci-job\", sha256 = \"$(printf '%s' "$token" | sha256sum | cut -d' ' -f1)\", scope = \"$scope\" }]"
+
+          name="nx-remote-cache-$(openssl rand -hex 4)"
+          docker run -d --name "$name" -p 127.0.0.1::3000 \
+            -e NX_CACHE_CONFIG_TOML="$config" \
+            -e AZURE_FEDERATED_TOKEN_FILE=/var/run/secrets/github/token \
+            -v "$dir/github-oidc-token:/var/run/secrets/github/token:ro" \
+            "$IMAGE" > /dev/null
+
+          server=""
+          for _ in $(seq 1 60); do
+            if [ "$(docker inspect -f '{{.State.Running}}' "$name" 2>/dev/null)" != true ]; then break; fi
+            port=$(docker port "$name" 3000/tcp 2>/dev/null | head -1 | sed 's/.*://')
+            if [ -n "$port" ] && curl -fsS -o /dev/null "http://127.0.0.1:$port/ready" 2>/dev/null; then
+              server="http://127.0.0.1:$port"
+              break
+            fi
+            sleep 1
+          done
+          if [ -z "$server" ]; then
+            echo "::error::the local nx-remote-cache server did not become ready. Its log:"
+            docker logs "$name" 2>&1 | tail -30
+            exit 1
+          fi
+          echo "NX_REMOTE_CACHE_CONTAINER=$name" >> "$GITHUB_ENV"
+        else
+          server="${SERVER_URL%/}"
+          : "${server:?server-url is required in remote mode}"
+          case "$PROVIDER" in
+            entra)
+              : "${TENANT_ID:?tenant-id is required}" "${client_id:?writer/reader client id is required}" "${API_SCOPE:?api-scope is required}"
+              assertion=$(github_oidc api://AzureADTokenExchange)
+              token=$(fetch \
+                --data-urlencode "client_id=$client_id" \
+                --data-urlencode "scope=$API_SCOPE" \
+                --data-urlencode "grant_type=client_credentials" \
+                --data-urlencode "client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer" \
+                --data-urlencode "client_assertion=$assertion" \
+                "https://login.microsoftonline.com/$TENANT_ID/oauth2/v2.0/token" | jq -er .access_token)
+              ;;
+            mint)
+              assertion=$(github_oidc "${GITHUB_AUDIENCE:-$server}")
+              token=$(fetch -X POST -H "Authorization: Bearer $assertion" "$server/v1/token/github" | jq -er .token)
+              ;;
+            *)
+              echo "::error::unknown provider '$PROVIDER' (expected entra or mint)"
+              exit 1
+              ;;
+          esac
+        fi
+
+        echo "::add-mask::$token"
+        # Only point Nx at the server once a token is in hand: a server URL without a valid
+        # token would make Nx fail the run on the server's 401.
+        echo "NX_SELF_HOSTED_REMOTE_CACHE_SERVER=$server" >> "$GITHUB_ENV"
+        echo "NX_SELF_HOSTED_REMOTE_CACHE_ACCESS_TOKEN=$token" >> "$GITHUB_ENV"
+        echo "Nx remote cache: $want access, mode $MODE"
