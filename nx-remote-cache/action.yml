@@ -27,10 +27,10 @@ inputs:
     default: v1
   version:
     description: >
-      nx-remote-cache release to run, e.g. 0.3.2. Its binary is downloaded from the
+      nx-remote-cache release to run, e.g. 0.4.0. Its binary is downloaded from the
       server repo's GitHub release and checked against the checksums built into this action,
       so only versions this action lists can run.
-    default: 0.3.2
+    default: 0.4.0
   server-binary:
     description: >
       Path to a server binary to run instead of downloading `version`, which is then

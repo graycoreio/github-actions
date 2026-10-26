@@ -16,6 +16,11 @@ export type Target = 'x86_64-unknown-linux-gnu' | 'aarch64-unknown-linux-gnu' | 
  *   gh release download v<version> -R graycoreio/nx-remote-cache -p SHA256SUMS -O -
  */
 export const RELEASE_CHECKSUMS: Record<string, Partial<Record<Target, string>>> = {
+    '0.4.0': {
+        'x86_64-unknown-linux-gnu': 'c99ddc2b5b4409e95fb7a42419107264ce7e4faa2b64cc1ca0405cba0813a0d2',
+        'aarch64-unknown-linux-gnu': '05fe260583d778b87964fe3a8007153d0ceb738f1c6d9c14c0418f9d16f6b242',
+        'universal-apple-darwin': 'fc967d3b0c12fb7c352d5c58facc8ebbab931cad5e10b36ad5f126fdbda8b413',
+    },
     '0.3.2': {
         'x86_64-unknown-linux-gnu': '7d88b5b7c3f7194143e63e47fca6dde3072979f7b6b7ece08eba8e1928b06e7a',
         'aarch64-unknown-linux-gnu': 'cf86c18a85c4d6f3717cd5f9bbcf47f03dbe12b4285422c5dbc2f283404840ba',

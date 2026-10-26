@@ -59,7 +59,7 @@ In a reusable workflow (`workflow_call`), the OIDC token is minted in the *calle
 | `storage-account` | | Storage account name. |
 | `storage-container` | | Blob container holding the cache. |
 | `storage-prefix` | `v1` | Virtual directory for entries inside the container. |
-| `version` | `0.3.2` | Server release to run. Only versions whose checksums are built into the action can run; see [Server releases](#server-releases). |
+| `version` | `0.4.0` | Server release to run. Only versions whose checksums are built into the action can run; see [Server releases](#server-releases). |
 | `server-binary` | | Path to a server binary to run instead of downloading `version`, relative to the job's working directory. For testing the server itself (its E2E workflow runs the binary built from the commit); not checked against any checksum. |
 | `server-repo` | `graycoreio/nx-remote-cache` | Repository whose releases hold the server, e.g. a private copy. Checksums are still checked against the action's table. |
 | `github-token` | `github.token` | Downloads the server release; needs read access to `server-repo`. The job's own token is enough while that repo is public. |
