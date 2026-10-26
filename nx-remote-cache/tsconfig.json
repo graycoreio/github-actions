@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "moduleResolution": "nodenext",
+        "module": "NodeNext",
+        "strict": true,
+        "skipLibCheck": true,
+        "types": ["node", "jest"]
+    },
+    "include": [
+        "src/**/*"
+    ]
+}

@@ -1,0 +1,52 @@
+name: Nx remote cache
+description: >
+  Start an nx-remote-cache server inside this job, talking to Azure Blob Storage with the job's
+  own identity (its GitHub OIDC token, exchanged for the writer or reader identity), and point
+  Nx at it: exports NX_SELF_HOSTED_REMOTE_CACHE_SERVER / NX_SELF_HOSTED_REMOTE_CACHE_ACCESS_TOKEN.
+  Linux x64/arm64 or macOS runners. The job needs `permissions: id-token: write`.
+
+inputs:
+  access:
+    description: >
+      `auto` (write only for a push to the default branch, read otherwise), `read` or `write`.
+      Only selects which identity to ask for; Azure (federated credentials and role
+      assignments) decides what is actually granted.
+    default: auto
+  tenant-id:
+    description: "Directory (tenant) id."
+  writer-client-id:
+    description: "Client id of the writer managed identity."
+  reader-client-id:
+    description: "Client id of the reader managed identity."
+  storage-account:
+    description: "Storage account name."
+  storage-container:
+    description: "Blob container holding the cache."
+  storage-prefix:
+    description: "Virtual directory for entries inside the container."
+    default: v1
+  version:
+    description: >
+      nx-remote-cache release to run, e.g. 0.3.2. Its binary is downloaded from the
+      server repo's GitHub release and checked against the checksums built into this action,
+      so only versions this action lists can run.
+    default: 0.3.2
+  server-binary:
+    description: >
+      Path to a server binary to run instead of downloading `version`, which is then
+      ignored. Relative paths are relative to the job's working directory. Meant for testing the
+      server itself; it is not checked against any checksum.
+  server-repo:
+    description: "GitHub repository whose releases hold the server, e.g. a private copy."
+    default: graycoreio/nx-remote-cache
+  github-token:
+    description: >
+      Token for downloading the server release; needs read access to `server-repo`.
+      The job's own token works while that repo is public.
+    default: ${{ github.token }}
+
+runs:
+  using: node24
+  main: dist/main.js
+  # Stops the server and prints its log.
+  post: dist/post.js

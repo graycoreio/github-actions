@@ -1,0 +1,61 @@
+name: nx-remote-cache Test
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'nx-remote-cache/**'
+      - '.github/workflows/_internal-nx-remote-cache.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'nx-remote-cache/**'
+      - '.github/workflows/_internal-nx-remote-cache.yml'
+
+# No `id-token: write`, on purpose: GitHub then provides no OIDC token, which is exactly the
+# fork-PR situation the "no token" tests below exercise.
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Test
+        working-directory: nx-remote-cache
+        run: npm test
+      - name: Build (bundles dist/ and type-checks)
+        working-directory: nx-remote-cache
+        run: npm run build
+      - name: The committed dist/ must match the source
+        run: |
+          if ! git diff --exit-code --stat -- nx-remote-cache/dist; then
+            echo "::error::nx-remote-cache/dist is out of date: run 'npm run build' in nx-remote-cache and commit the result"
+            exit 1
+          fi
+
+  no-token-cache-off:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./nx-remote-cache
+        with:
+          tenant-id: unused
+          writer-client-id: unused
+          reader-client-id: unused
+          storage-account: unused
+          storage-container: unused
+      - name: No server started, remote cache off
+        run: |
+          if [ -n "${NX_SELF_HOSTED_REMOTE_CACHE_SERVER:-}${NX_SELF_HOSTED_REMOTE_CACHE_ACCESS_TOKEN:-}${NX_REMOTE_CACHE_LOG:-}" ]; then
+            echo "::error::expected no Nx remote cache variables and no server without a token"; exit 1
+          fi
+          if pgrep -x nx-remote-cache; then echo "::error::a server process is running"; exit 1; fi

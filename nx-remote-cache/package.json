@@ -1,0 +1,12 @@
+{
+  "name": "@graycore/github-actions-nx-remote-cache",
+  "version": "1.0.0",
+  "description": "A Github Action that connects Nx to an nx-remote-cache, using the job's GitHub OIDC token.",
+  "private": true,
+  "scripts": {
+    "build": "npx esbuild --outdir=dist --platform=node --target=node24 --bundle --minify src/main.ts src/post.ts && tsc --noEmit",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "MIT"
+}
