@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.0](https://github.com/graycoreio/github-actions/compare/v2.6.0...v2.7.0) (2026-11-01)
+
+
+### Features
+
+* **angular-universal-vercel:** use ghcr image ([d6e755a](https://github.com/graycoreio/github-actions/commit/d6e755a56bde61db649ef08e4a1a92cd825f6ac7))
+
 ## [2.6.0](https://github.com/graycoreio/github-actions/compare/v2.5.1...v2.6.0) (2026-07-17)
 
 

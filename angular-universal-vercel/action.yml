@@ -37,7 +37,7 @@ outputs:
 
 runs:
   using: "docker"
-  image: "docker://ghcr.io/graycoreio/angular-universal-vercel:2.5.1" # x-release-please-version
+  image: "docker://ghcr.io/graycoreio/angular-universal-vercel:2.7.0" # x-release-please-version
 
 branding:
   icon: "code"
