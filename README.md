@@ -28,7 +28,6 @@ Each action is a building block you can drop into your own workflow. Reference i
 | Action Name                                                     | Description                                                                                          |
 | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | [Setup Node](./setup-node)                                      | A Github Action that sets up Node and npm for Angular development, with dependency caching.          |
-| [Clear Old Nx Cache](./clear-old-nx-cache)                      | A Github Action that prunes the oldest Nx cache entries until the cache fits under a size limit.     |
 | [Set Versions From Root](./set-versions-from-root/README.md)    | A Github Action that sets package dependency versions from the versions defined in a monorepo root. |
 
 ### Test
