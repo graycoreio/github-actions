@@ -20,14 +20,14 @@ Opinionated Github Actions to make building, testing, and deploying Angular appl
 Each action is a building block you can drop into your own workflow. Reference it by path and pin it to a release tag:
 
 ```yaml
-- uses: graycoreio/github-actions/setup-node@v2.6.0
+- uses: graycoreio/github-actions/setup-node@v2.7.0 # x-release-please-version
 ```
 
 ### Build
 
 | Action Name                                                     | Description                                                                                          |
 | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| [Setup Node](./setup-node)                                      | A Github Action that sets up Node and npm for Angular development, with dependency caching.          |
+| [Setup Node](./setup-node/README.md)                                      | A Github Action that sets up Node and npm for Angular development, with dependency caching.          |
 | [Set Versions From Root](./set-versions-from-root/README.md)    | A Github Action that sets package dependency versions from the versions defined in a monorepo root. |
 
 ### Test
@@ -41,6 +41,6 @@ Each action is a building block you can drop into your own workflow. Reference i
 | Action Name                                                         | Description                                                                                      |
 | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | [Angular Universal (Vercel)](./angular-universal-vercel/README.md)  | A Github Action that deploys an Angular Universal (SSR) or static Angular application to Vercel. |
-| [Angular Universal (Vercel) from Workflow Run](./angular-universal-vercel-wflw-run) | A Github Action that deploys an Angular Universal build artifact from another workflow run to Vercel. |
-| [Vercel](./vercel)                                                  | A Github Action that deploys a static site to Vercel.                                            |
+| [Angular Universal (Vercel) from Workflow Run](./angular-universal-vercel-wflw-run/README.md) | A Github Action that deploys an Angular Universal build artifact from another workflow run to Vercel. |
+| [Vercel](./vercel/README.md)                                                  | A Github Action that deploys a static site to Vercel.                                            |
 | [Upload Algolia Index](./upload-algolia-index/README.md)            | A Github Action that uploads a set of search indices to Algolia.                                 |

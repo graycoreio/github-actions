@@ -9,7 +9,17 @@
   "packages": {
     ".": {
       "release-type": "node",
-      "extra-files": ["angular-universal-vercel/action.yml"]
+      "extra-files": [
+        "README.md",
+        "angular-universal-vercel/action.yml",
+        "angular-universal-vercel/README.md",
+        "angular-universal-vercel-wflw-run/README.md",
+        "lighthouse-ci/README.md",
+        "set-versions-from-root/README.md",
+        "setup-node/README.md",
+        "upload-algolia-index/README.md",
+        "vercel/README.md"
+      ]
     }
   }
 }
