@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/graycoreio/github-actions/compare/v2.7.0...v3.0.0) (2026-11-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* **clear-old-nx-cache:** the clear-old-nx-cache action has been removed.
+
+### Features
+
+* **clear-old-nx-cache:** remove action ([9550981](https://github.com/graycoreio/github-actions/commit/9550981c486f5a1793a6ffc2828a313e4ed831ea))
+
 ## [2.7.0](https://github.com/graycoreio/github-actions/compare/v2.6.0...v2.7.0) (2026-11-01)
 
 
