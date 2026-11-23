@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: graycoreio/github-actions/setup-node@v2.7.0 # x-release-please-version
+      - uses: graycoreio/github-actions/setup-node@v3.0.0 # x-release-please-version
         with:
           node-version: 24
       - run: npx ng build
@@ -72,7 +72,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: app
-      - uses: graycoreio/github-actions/angular-universal-vercel@v2.7.0 # x-release-please-version
+      - uses: graycoreio/github-actions/angular-universal-vercel@v3.0.0 # x-release-please-version
         id: deploy
         with:
           prod: true
@@ -87,7 +87,7 @@ jobs:
 ### Static site
 
 ```yml
-- uses: graycoreio/github-actions/angular-universal-vercel@v2.7.0 # x-release-please-version
+- uses: graycoreio/github-actions/angular-universal-vercel@v3.0.0 # x-release-please-version
   with:
     vercel_token: ${{ secrets.VERCEL_TOKEN }}
     vercel_org: ${{ secrets.VERCEL_ORG }}
@@ -98,7 +98,7 @@ jobs:
 With redirects and a prerendered 404 page:
 
 ```yml
-- uses: graycoreio/github-actions/angular-universal-vercel@v2.7.0 # x-release-please-version
+- uses: graycoreio/github-actions/angular-universal-vercel@v3.0.0 # x-release-please-version
   with:
     vercel_token: ${{ secrets.VERCEL_TOKEN }}
     vercel_org: ${{ secrets.VERCEL_ORG }}

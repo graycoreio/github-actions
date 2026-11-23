@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: graycoreio/github-actions/lighthouse-ci@v2.7.0 # x-release-please-version
+      - uses: graycoreio/github-actions/lighthouse-ci@v3.0.0 # x-release-please-version
         with:
           target: lhci
           domain: https://www.example.com

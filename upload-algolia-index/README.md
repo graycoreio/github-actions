@@ -45,7 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: npm run build:search-index
-      - uses: graycoreio/github-actions/upload-algolia-index@v2.7.0 # x-release-please-version
+      - uses: graycoreio/github-actions/upload-algolia-index@v3.0.0 # x-release-please-version
         with:
           appId: ${{ secrets.ALGOLIA_APP_ID }}
           apiKey: ${{ secrets.ALGOLIA_API_KEY }}

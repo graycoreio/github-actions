@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: graycoreio/github-actions/setup-node@v2.7.0 # x-release-please-version
+      - uses: graycoreio/github-actions/setup-node@v3.0.0 # x-release-please-version
         with:
           node-version: 24
       - run: npx ng build
@@ -71,7 +71,7 @@ jobs:
     permissions:
       actions: read
     steps:
-      - uses: graycoreio/github-actions/angular-universal-vercel-wflw-run@v2.7.0 # x-release-please-version
+      - uses: graycoreio/github-actions/angular-universal-vercel-wflw-run@v3.0.0 # x-release-please-version
         id: deploy
         with:
           artifact: app
