@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: graycoreio/github-actions/setup-node@v2.7.0 # x-release-please-version
+      - uses: graycoreio/github-actions/setup-node@v3.0.0 # x-release-please-version
         with:
           node-version: 24
           use-stamp-cache: 'true'
@@ -71,7 +71,7 @@ jobs:
 ### Private registry
 
 ```yml
-- uses: graycoreio/github-actions/setup-node@v2.7.0 # x-release-please-version
+- uses: graycoreio/github-actions/setup-node@v3.0.0 # x-release-please-version
   with:
     node-version: 24
     registry-url: https://npm.pkg.github.com

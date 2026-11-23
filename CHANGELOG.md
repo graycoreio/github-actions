@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.0.0](https://github.com/graycoreio/github-actions/compare/v2.7.0...v3.0.0) (2026-11-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* **clear-old-nx-cache:** the clear-old-nx-cache action has been removed.
+
+### Features
+
+* **angular-universal-vercel:** add static_routes and static_not_found_page inputs ([2524b7c](https://github.com/graycoreio/github-actions/commit/2524b7c69f7dd9c9fa52d8d8a942a01eb9407a17))
+* **angular-universal-vercel:** cache hashed build files as immutable in static mode ([505d73b](https://github.com/graycoreio/github-actions/commit/505d73b3121bbceff5e4373e3e8dcbda0c3e302d))
+* **clear-old-nx-cache:** remove action ([9550981](https://github.com/graycoreio/github-actions/commit/9550981c486f5a1793a6ffc2828a313e4ed831ea))
+
 ## [2.7.0](https://github.com/graycoreio/github-actions/compare/v2.6.0...v2.7.0) (2026-11-01)
 
 

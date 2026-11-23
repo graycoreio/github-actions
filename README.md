@@ -20,7 +20,7 @@ Opinionated Github Actions to make building, testing, and deploying Angular appl
 Each action is a building block you can drop into your own workflow. Reference it by path and pin it to a release tag:
 
 ```yaml
-- uses: graycoreio/github-actions/setup-node@v2.7.0 # x-release-please-version
+- uses: graycoreio/github-actions/setup-node@v3.0.0 # x-release-please-version
 ```
 
 ### Build
