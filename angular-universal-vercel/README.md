@@ -29,7 +29,7 @@ See the [action.yml](./action.yml)
 The action deploys the contents of `$GITHUB_WORKSPACE`, which must be your Angular build output (the folder containing `browser/` and, for SSR, `server/`).
 
 - `server` - Deploys `browser/` as static assets and `server/` as a Vercel serverless function that handles every route without a file extension.
-- `static` - Deploys the prerendered `browser/` directory through the [Vercel Build Output API](https://vercel.com/docs/build-output-api/v3) with no serverless function. Unknown routes serve `index.csr.html` with a 404 status.
+- `static` - Deploys the prerendered `browser/` directory through the [Vercel Build Output API](https://vercel.com/docs/build-output-api/v3) with no serverless function. Hashed build files (`main-*`, `polyfills-*`, `styles-*`, `chunk-*` and hashed files in `media/`) are served with a one year immutable `cache-control`. Unknown routes serve `index.csr.html` with a 404 status.
 
 ## Angular versions
 

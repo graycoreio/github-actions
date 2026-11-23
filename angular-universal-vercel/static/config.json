@@ -1,6 +1,16 @@
 {
   "version": 3,
   "routes": [
+    {
+      "src": "^/(?:main|polyfills|styles|chunk)-[A-Za-z0-9_-]{8}\\.(?:js|css)$",
+      "headers": { "cache-control": "public, max-age=31536000, immutable" },
+      "continue": true
+    },
+    {
+      "src": "^/media/.+-[A-Za-z0-9_-]{8}\\.[A-Za-z0-9]+$",
+      "headers": { "cache-control": "public, max-age=31536000, immutable" },
+      "continue": true
+    },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.csr.html", "status": 404 }
   ]
