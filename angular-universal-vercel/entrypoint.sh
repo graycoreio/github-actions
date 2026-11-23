@@ -6,6 +6,8 @@ set -e
 INPUT_NG_VERSION="${INPUT_NG_VERSION:-19}"
 INPUT_NG_SSR_ENGINE="${INPUT_NG_SSR_ENGINE:-CommonEngine}"
 INPUT_NG_OUTPUT_MODE="${INPUT_NG_OUTPUT_MODE:-server}"
+export INPUT_STATIC_ROUTES="${INPUT_STATIC_ROUTES:-[]}"
+export INPUT_STATIC_NOT_FOUND_PAGE="${INPUT_STATIC_NOT_FOUND_PAGE:-index.csr.html}"
 
 # Ensure INPUT_NG_VERSION is a number
 if ! [[ "$INPUT_NG_VERSION" =~ ^[0-9]+$ ]]; then
@@ -39,7 +41,7 @@ if [ "$INPUT_NG_OUTPUT_MODE" = "static" ]; then
     echo "Assemble Vercel Build Output (static, no SSR function)"
     mkdir -p /app/.vercel/output
     mv /app/browser /app/.vercel/output/static
-    cp /static/config.json /app/.vercel/output/config.json
+    node /static/build-config.js /static/config.json /app/.vercel/output/static /app/.vercel/output/config.json
     DEPLOY_FLAGS+=(--prebuilt)
 else
     echo "Copy appropriate serverless files to /api for Angular $INPUT_NG_VERSION with $INPUT_NG_SSR_ENGINE"

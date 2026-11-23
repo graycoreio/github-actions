@@ -30,6 +30,14 @@ inputs:
     description: "The Angular application builder outputMode. One of 'server' or 'static'. 'static' deploys the prerendered browser output via the Vercel Build Output API without a serverless function"
     required: false
     default: 'server'
+  static_routes:
+    description: "A JSON array of Vercel Build Output API routes (e.g. redirects) checked before the static files. Only used when ng_output_mode is 'static'"
+    required: false
+    default: '[]'
+  static_not_found_page:
+    description: "The page, relative to the browser output, served with a 404 status for unmatched routes. Only used when ng_output_mode is 'static'"
+    required: false
+    default: 'index.csr.html'
 
 outputs:
   url: 

@@ -17,6 +17,8 @@ See the [action.yml](./action.yml)
 | ng_version        | Your Angular major version, e.g. `20`. Selects the serverless entrypoint. See [Angular versions](#angular-versions). | false    | '19'           |
 | ng_ssr_engine     | Your SSR engine: `CommonEngine` or `AngularNodeAppEngine`. Ignored when `ng_output_mode` is `static`.         | false    | 'CommonEngine' |
 | ng_output_mode    | Your Angular application builder `outputMode`: `server` or `static`. See [Output modes](#output-modes).       | false    | 'server'       |
+| static_routes     | A JSON array of [Build Output API routes](https://vercel.com/docs/build-output-api/v3/configuration#routes) checked before the static files, e.g. redirects. `static` only. | false | '[]' |
+| static_not_found_page | The page, relative to `browser/`, served with a 404 status for unmatched routes. `static` only.         | false    | 'index.csr.html' |
 
 ## Outputs
 
@@ -29,7 +31,7 @@ See the [action.yml](./action.yml)
 The action deploys the contents of `$GITHUB_WORKSPACE`, which must be your Angular build output (the folder containing `browser/` and, for SSR, `server/`).
 
 - `server` - Deploys `browser/` as static assets and `server/` as a Vercel serverless function that handles every route without a file extension.
-- `static` - Deploys the prerendered `browser/` directory through the [Vercel Build Output API](https://vercel.com/docs/build-output-api/v3) with no serverless function. Hashed build files (`main-*`, `polyfills-*`, `styles-*`, `chunk-*` and hashed files in `media/`) are served with a one year immutable `cache-control`. Unknown routes serve `index.csr.html` with a 404 status.
+- `static` - Deploys the prerendered `browser/` directory through the [Vercel Build Output API](https://vercel.com/docs/build-output-api/v3) with no serverless function. Hashed build files (`main-*`, `polyfills-*`, `styles-*`, `chunk-*` and hashed files in `media/`) are served with a one year immutable `cache-control`. Routes in `static_routes` are checked before the static files. Unknown routes serve `static_not_found_page` (`index.csr.html` by default) with a 404 status.
 
 ## Angular versions
 
@@ -91,4 +93,20 @@ jobs:
     vercel_org: ${{ secrets.VERCEL_ORG }}
     vercel_project_id: ${{ secrets.VERCEL_PROJECT_ID }}
     ng_output_mode: static
+```
+
+With redirects and a prerendered 404 page:
+
+```yml
+- uses: graycoreio/github-actions/angular-universal-vercel@v2.7.0 # x-release-please-version
+  with:
+    vercel_token: ${{ secrets.VERCEL_TOKEN }}
+    vercel_org: ${{ secrets.VERCEL_ORG }}
+    vercel_project_id: ${{ secrets.VERCEL_PROJECT_ID }}
+    ng_output_mode: static
+    static_not_found_page: 404/index.html
+    static_routes: |
+      [
+        { "src": "^/old/(.*)$", "status": 308, "headers": { "Location": "/new/$1" } }
+      ]
 ```
